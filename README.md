@@ -12,3 +12,4 @@ to create interactive maps.
 Here you can see an example of a map, created by module,
 using this data:
 python3 main.py 2000 49.817545 24.023932 locations.list
+![Снимок экрана (122)](https://user-images.githubusercontent.com/93624756/153674954-9c243238-ee86-4038-8294-0a8235157d3a.png)
