@@ -1,3 +1,4 @@
+"""Module to create interactive map of closest film creating places"""
 import folium
 from geopy import point
 from geopy.geocoders import Nominatim
@@ -9,8 +10,8 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Build a map with closest films')
 parser.add_argument("year", type=int, help='necessary year')
-parser.add_argument("coord1", type=int, help='first coordinate')
-parser.add_argument("coord2", type=int, help='Second coordinate')
+parser.add_argument("coord1", type=float, help='first coordinate')
+parser.add_argument("coord2", type=float, help='Second coordinate')
 parser.add_argument("path", type=str, help='Path to the file with database')
 args = parser.parse_args()
 
@@ -47,7 +48,8 @@ def read_file_info(path, expected_year):
                     position = position[::-1]
                     try:
                         location = geolocator.geocode(position)
-                        films.add((name, year, (location.latitude, location.longitude)))
+                        films.add((name, year, (location.latitude,
+                                                location.longitude)))
                     except AttributeError:
                         continue
                     except GeocoderUnavailable:
@@ -68,7 +70,7 @@ def find_closest(point, films):
     closest = []
     for film in films:
         closest.append((film[0], film[2], round(haversine(film[2], point))))
-        closest = sorted(closest, key=lambda x:x[2])
+        closest = sorted(closest, key=lambda x: x[2])
         if len(closest) > 10:
             closest = closest[:10]
     return closest
@@ -84,9 +86,8 @@ def map_generation(point, closest):
     """
     map = folium.Map(location=point, zoom_start=10)
     for film in closest:
-        map.add_child(folium.Marker(location=film[1],
-        popup=film[0],
-        icon=folium.Icon()))
+        map.add_child(folium.Marker(location=film[1], popup=film[0],
+                                    icon=folium.Icon()))
         map.save('Map_1.html')
     return map
 
